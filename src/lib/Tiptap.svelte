@@ -57,6 +57,60 @@
       loadError = err instanceof Error ? err.message : String(err)
     }
   }
+
+  function saveToLocalStorage() {
+    if (!editorState.editor) return
+
+    const json = editorState.editor.getJSON()
+
+    localStorage.setItem('tiptap-document', JSON.stringify(json))
+
+    alert('Document saved!')
+  }
+
+  function loadFromLocalStorage() {
+    if (!editorState.editor) return
+
+    const saved = localStorage.getItem('tiptap-document')
+
+    if (!saved) {
+      alert('No saved document found!')
+      return
+    }
+
+    try {
+      const doc = JSON.parse(saved)
+
+      editorState.editor.commands.setContent(doc, {
+        errorOnInvalidContent: true
+      })
+
+      alert('Document loaded!')
+    } catch (err) {
+      loadError = err instanceof Error ? err.message : String(err)
+    }
+  }
+
+  function downloadJSON() {
+    if (!editorState.editor) return
+
+    const json = editorState.editor.getJSON()
+
+    const blob = new Blob(
+      [JSON.stringify(json, null, 2)],
+      { type: 'application/json' }
+    )
+
+    const url = URL.createObjectURL(blob)
+
+    const link = document.createElement('a')
+    link.href = url
+    link.download = 'tiptap-document.json'
+    link.click()
+
+    URL.revokeObjectURL(url)
+  }
+
 </script>
 
 <div style="position: relative" class="app">
@@ -91,6 +145,9 @@
   <div class="json-panel">
     <button onclick={getJSON}>Get JSON</button>
     <button onclick={loadJSON}>Load JSON</button>
+    <button onclick={saveToLocalStorage}>Save</button>
+    <button onclick={loadFromLocalStorage}>Load Saved</button>
+    <button onclick={downloadJSON}>Download JSON</button>
     {#if loadError}
       <p class="error">Could not load: {loadError}</p>
     {/if}
