@@ -51,6 +51,12 @@
       <button onclick={() => editorState.editor.chain().focus().setParagraph().run()} class:active={editorState.editor.isActive('paragraph')}>
         P
       </button>
+
+      <!-- New addition -->
+      <button onclick={() => editorState.editor.chain().focus().toggleItalic().run()} class:active={editorState.editor.isActive('paragraph')}>
+      I
+      </button>
+
     </div>
   {/if}
 
