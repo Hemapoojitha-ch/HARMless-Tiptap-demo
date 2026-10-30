@@ -17,7 +17,7 @@
 
 <!-- This is the sample code from the svelte tutorial -->
 <script>
-  import Tiptap from '$lib/Tiptap.svelte'
+  import Tiptap from '#lib/Tiptap.svelte'
 </script>
 
 <main>
