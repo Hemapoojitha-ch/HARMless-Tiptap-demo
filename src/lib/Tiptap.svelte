@@ -1,172 +1,198 @@
 <script>
+  import "./styles.css";
   import "./style.css";
-  import { onMount, onDestroy } from 'svelte'
-  import { Editor } from '@tiptap/core'
-  import { StarterKit } from '@tiptap/starter-kit'
-  import BubbleMenu from '@tiptap/extension-bubble-menu'
 
-  let bubbleMenu = $state()
-  let element = $state()
-  /** @type {{ editor: Editor | null }} */
-  let editorState = $state({editor: null})
+  import { Color } from '@tiptap/extension-text-style'
+  import { ListItem, TaskItem, TaskList } from '@tiptap/extension-list'
+  import { TextStyle } from '@tiptap/extension-text-style'
+  import StarterKit from "@tiptap/starter-kit";
+  import { Editor } from "@tiptap/core";
+  import { onMount } from "svelte";
+
+  // oxlint-disable-next-line
+  let element = $state();
+  let editor = $state(null);
 
   onMount(() => {
-    editorState.editor = new Editor({
+    editor = new Editor({
       element: element,
       extensions: [
+        Color.configure({ types: [TextStyle.name, ListItem.name] }),
+        TextStyle.configure({ types: [ListItem.name] }),
         StarterKit,
-        BubbleMenu.configure({
-          element: bubbleMenu,
-        }),
+        TaskItem.configure({ nested: true }),
+        TaskList,
       ],
       content: `
-        <h1>Hello Svelte! 🐼 </h1>
-        <p>This editor is running in Svelte.</p>
-        <p>Select some text to see the bubble menu popping up.</p>
-      `,
-      onTransaction: ({ editor }) => {
-        // Update the state signal to force a re-render
-        editorState = { editor }
+            <h2>
+              Hi there,
+            </h2>
+            <p>
+              this is a <em>basic</em> example of <strong>Tiptap</strong>. Sure, there are all kind of basic text styles you’d probably expect from a text editor. But wait until you see the lists:
+            </p>
+            <ul>
+              <li>
+                That’s a bullet list with one …
+              </li>
+              <li>
+                … or two list items.
+              </li>
+            </ul>
+            <p>
+              Isn’t that great? And all of that is editable. But wait, there’s more. Let’s try a code block:
+            </p>
+            <pre><code class="language-css">body {
+  display: none;
+}</code></pre>
+            <p>
+              I know, I know, this is impressive. It’s only the tip of the iceberg though. Give it a try and click a little bit around. Don’t forget to check the other examples too.
+            </p>
+            <blockquote>
+              Wow, that’s amazing. Good work, boy! 👏
+              <br />
+              — Mom
+            </blockquote>
+          `,
+      onTransaction: ({ editor: updatedEditor }) => {
+        // force re-render so `editor.isActive` works as expected
+        // oxlint-disable-next-line no-self-assign
+        editor = updatedEditor;
       },
-    })
-  })
-  onDestroy(() => {
-    editorState.editor?.destroy()
-  })
-
-  // JSON text shown in / read from the textarea below the editor
-  let jsonText = $state('')
-  let loadError = $state('')
-
-  // Read the document as JSON (this is what we will save, never HTML)
-  function getJSON() {
-    if (!editorState.editor) return
-    jsonText = JSON.stringify(editorState.editor.getJSON(), null, 2)
-    loadError = ''
-  }
-
-  // Restore a saved JSON document into the editor
-  function loadJSON() {
-    if (!editorState.editor) return
-    try {
-      const doc = JSON.parse(jsonText)
-      // errorOnInvalidContent makes Tiptap reject anything that doesn't fit the editor's schema instead of loading part of it
-      editorState.editor.commands.setContent(doc, { errorOnInvalidContent: true }) 
-      editorState.editor.commands.focus()
-      loadError = ''
-    } catch (err) {
-      loadError = err instanceof Error ? err.message : String(err)
-    }
-  }
-
-  function saveToLocalStorage() {
-    if (!editorState.editor) return
-
-    const json = editorState.editor.getJSON()
-
-    localStorage.setItem('tiptap-document', JSON.stringify(json))
-
-    alert('Document saved!')
-  }
-
-  function loadFromLocalStorage() {
-    if (!editorState.editor) return
-
-    const saved = localStorage.getItem('tiptap-document')
-
-    if (!saved) {
-      alert('No saved document found!')
-      return
-    }
-
-    try {
-      const doc = JSON.parse(saved)
-
-      editorState.editor.commands.setContent(doc, {
-        errorOnInvalidContent: true
-      })
-
-      alert('Document loaded!')
-    } catch (err) {
-      loadError = err instanceof Error ? err.message : String(err)
-    }
-  }
-
-  function downloadJSON() {
-    if (!editorState.editor) return
-
-    const json = editorState.editor.getJSON()
-
-    const blob = new Blob(
-      [JSON.stringify(json, null, 2)],
-      { type: 'application/json' }
-    )
-
-    const url = URL.createObjectURL(blob)
-
-    const link = document.createElement('a')
-    link.href = url
-    link.download = 'tiptap-document.json'
-    link.click()
-
-    URL.revokeObjectURL(url)
-  }
-
+    });
+    return () => {
+      editor?.destroy();
+    };
+  });
 </script>
 
-<div style="position: relative" class="app">
-  {#if editorState.editor}
-    <div class="fixed-menu">
+{#if editor}
+  <div class="control-group">
+    <div class="button-group">
       <button
-        onclick={() => editorState.editor?.chain().focus().toggleHeading({ level: 1 }).run()}
-        class:active={editorState.editor.isActive('heading', { level: 1 })}
+        onclick={() => console.log && editor.chain().focus().toggleBold().run()}
+        disabled={!editor.can().chain().focus().toggleBold().run()}
+        class={editor.isActive("bold") ? "is-active" : ""}
+      >
+        Bold
+      </button>
+      <button
+        onclick={() => editor.chain().focus().toggleItalic().run()}
+        disabled={!editor.can().chain().focus().toggleItalic().run()}
+        class={editor.isActive("italic") ? "is-active" : ""}
+      >
+        Italic
+      </button>
+      <button
+        onclick={() => editor.chain().focus().toggleStrike().run()}
+        disabled={!editor.can().chain().focus().toggleStrike().run()}
+        class={editor.isActive("strike") ? "is-active" : ""}
+      >
+        Strike
+      </button>
+      <button
+        onclick={() => editor.chain().focus().toggleCode().run()}
+        disabled={!editor.can().chain().focus().toggleCode().run()}
+        class={editor.isActive("code") ? "is-active" : ""}
+      >
+        Code
+      </button>
+      <button onclick={() => editor.chain().focus().unsetAllMarks().run()}>Clear marks</button>
+      <button onclick={() => editor.chain().focus().clearNodes().run()}>Clear nodes</button>
+      <button
+        onclick={() => editor.chain().focus().setParagraph().run()}
+        class={editor.isActive("paragraph") ? "is-active" : ""}
+      >
+        Paragraph
+      </button>
+      <button
+        onclick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+        class={editor.isActive("heading", { level: 1 }) ? "is-active" : ""}
       >
         H1
       </button>
       <button
-        onclick={() => editorState.editor?.chain().focus().toggleHeading({ level: 2 }).run()}
-        class:active={editorState.editor.isActive('heading', { level: 2 })}
+        onclick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+        class={editor.isActive("heading", { level: 2 }) ? "is-active" : ""}
       >
         H2
       </button>
-      <button onclick={() => editorState.editor?.chain().focus().setParagraph().run()} class:active={editorState.editor.isActive('paragraph')}>
-        P
+      <button
+        onclick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+        class={editor.isActive("heading", { level: 3 }) ? "is-active" : ""}
+      >
+        H3
       </button>
-
-      <!-- New addition -->
-      <button onclick={() => editorState.editor?.chain().focus().toggleItalic().run()} class:active={editorState.editor.isActive('italic')}>
-      I
+      <button
+        onclick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
+        class={editor.isActive("heading", { level: 4 }) ? "is-active" : ""}
+      >
+        H4
       </button>
-
+      <button
+        onclick={() => editor.chain().focus().toggleHeading({ level: 5 }).run()}
+        class={editor.isActive("heading", { level: 5 }) ? "is-active" : ""}
+      >
+        H5
+      </button>
+      <button
+        onclick={() => editor.chain().focus().toggleHeading({ level: 6 }).run()}
+        class={editor.isActive("heading", { level: 6 }) ? "is-active" : ""}
+      >
+        H6
+      </button>
+      <button
+        onclick={() => editor.chain().focus().toggleBulletList().run()}
+        class={editor.isActive("bulletList") ? "is-active" : ""}
+      >
+        Bullet list
+      </button>
+      <button
+        onclick={() => editor.chain().focus().toggleOrderedList().run()}
+        class={editor.isActive("orderedList") ? "is-active" : ""}
+      >
+        Ordered list
+      </button>
+      <button
+        onclick={() => editor.chain().focus().toggleTaskList().run()}
+        class={editor.isActive("taskList") ? "is-active" : ""}
+      >
+        Task list
+      </button>
+      <button
+        onclick={() => editor.chain().focus().toggleCodeBlock().run()}
+        class={editor.isActive("codeBlock") ? "is-active" : ""}
+      >
+        Code block
+      </button>
+      <button
+        onclick={() => editor.chain().focus().toggleBlockquote().run()}
+        class={editor.isActive("blockquote") ? "is-active" : ""}
+      >
+        Blockquote
+      </button>
+      <button onclick={() => editor.chain().focus().setHorizontalRule().run()}>
+        Horizontal rule
+      </button>
+      <button onclick={() => editor.chain().focus().setHardBreak().run()}>Hard break</button>
+      <button
+        onclick={() => editor.chain().focus().undo().run()}
+        disabled={!editor.can().chain().focus().undo().run()}
+      >
+        Undo
+      </button>
+      <button
+        onclick={() => editor.chain().focus().redo().run()}
+        disabled={!editor.can().chain().focus().redo().run()}
+      >
+        Redo
+      </button>
+      <button
+        onclick={() => editor.chain().focus().setColor('#958DF1').run()}
+        class={editor.isActive('textStyle', { color: '#958DF1' }) ? 'is-active' : ''}
+      >
+        Purple
+      </button>
     </div>
-  {/if}
-
-  <div bind:this={element}></div>
-
-  <div class="json-panel">
-    <button onclick={getJSON}>Get JSON</button>
-    <button onclick={loadJSON}>Load JSON</button>
-    <button onclick={saveToLocalStorage}>Save</button>
-    <button onclick={loadFromLocalStorage}>Load Saved</button>
-    <button onclick={downloadJSON}>Download JSON</button>
-    {#if loadError}
-      <p class="error">Could not load: {loadError}</p>
-    {/if}
-    <textarea bind:value={jsonText} rows="12" placeholder="Click Get JSON, edit or paste JSON here, then Load JSON"></textarea>
   </div>
-</div>
-
-<style>
-  .json-panel textarea {
-    display: block;
-    width: 100%;
-    font-family: monospace;
-  }
-  .error {
-    color: crimson;
-  }
-  button.active {
-    background: black;
-    color: white;
-  }
-</style>
+{/if}
+<div bind:this={element}></div>
