@@ -1,11 +1,4 @@
 /* Basic editor styles */
-:root {
-    --purple-light: #b787c6;
-    --black: #2e2b36;
-    --white: #ffffff;
-    --gray-2: #e0e0e0;
-    --gray-3: #b0b0b0;
-  }
 
 .tiptap {
     :first-child {
