@@ -195,4 +195,16 @@
     </div>
   </div>
 {/if}
-<div bind:this={element}></div>
+<div class="editor" bind:this={element}></div>
+
+  <style>
+    .editor {
+      margin: 20px;
+      border: 2px solid var(--gray-3);
+      border-radius: 0.75rem;
+    }
+
+    .editor:focus-within {
+      border-color: var(--purple);
+    }
+  </style>
