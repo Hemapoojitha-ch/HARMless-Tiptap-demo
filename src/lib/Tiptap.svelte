@@ -6,23 +6,37 @@
   import { ListItem, TaskItem, TaskList } from '@tiptap/extension-list'
   import { TextStyle } from '@tiptap/extension-text-style'
   import StarterKit from "@tiptap/starter-kit";
-  import { Editor } from "@tiptap/core";
+  import { Editor, generateHTML } from "@tiptap/core";
   import { onMount } from "svelte";
 
   // oxlint-disable-next-line
   let element = $state();
   let editorState = $state({ editor: null });
+  let savedHTML = $state();
+  let isEditing = $state(true);
+
+  function save() {
+    const json = editorState.editor.getJSON();
+    savedHTML = generateHTML(json, extensions);
+    isEditing = false;
+  }
+
+  function edit() {
+    isEditing = true;
+  }
+
+  const extensions = [
+    Color.configure({ types: [TextStyle.name, ListItem.name] }),
+    TextStyle.configure({ types: [ListItem.name] }),
+    StarterKit,
+    TaskItem.configure({ nested: true }),
+    TaskList,
+  ];
 
   onMount(() => {
     editorState.editor = new Editor({
       element: element,
-      extensions: [
-        Color.configure({ types: [TextStyle.name, ListItem.name] }),
-        TextStyle.configure({ types: [ListItem.name] }),
-        StarterKit,
-        TaskItem.configure({ nested: true }),
-        TaskList,
-      ],
+      extensions,
       content: `
             <h2>
               Hi there,
@@ -65,6 +79,7 @@
   });
 </script>
 
+<div hidden={!isEditing}>
 {#if editorState.editor}
   <div class="control-group">
     <div class="button-group">
@@ -195,16 +210,33 @@
     </div>
   </div>
 {/if}
+
 <div class="editor" bind:this={element}></div>
+<div class="control-group">
+  <div class="button-group">
+    <button onclick={save}>Save</button>
+  </div>
+</div>
+</div>
 
-  <style>
-    .editor {
-      margin: 20px;
-      border: 2px solid var(--gray-3);
-      border-radius: 0.75rem;
-    }
+{#if !isEditing}
+    <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+    <article class="tiptap">{@html savedHTML}</article>
+    <div class="control-group">
+      <div class="button-group">
+        <button onclick={edit}>Edit</button>
+      </div>
+    </div>
+  {/if}
 
-    .editor:focus-within {
-      border-color: var(--purple);
-    }
-  </style>
+<style>
+  .editor {
+    margin: 20px;
+    border: 2px solid var(--gray-3);
+    border-radius: 0.75rem;
+  }
+
+  .editor:focus-within {
+    border-color: var(--purple);
+  }
+</style>
