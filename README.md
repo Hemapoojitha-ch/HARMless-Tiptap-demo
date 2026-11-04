@@ -54,3 +54,17 @@ npm run build
 You can preview the production build with `npm run preview`.
 
 > To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+
+
+## Other Resources
+
+- [Tiptap: install guide for Svelte](https://tiptap.dev/docs/editor/getting-started/install/svelte)
+- [Tiptap: Default text editor example](https://tiptap.dev/docs/examples/basics/default-text-editor)
+- [Tiptap: Minimal setup example](https://tiptap.dev/docs/examples/basics/minimal-setup)
+- [Tiptap: saving and showing content (JSON and HTML)](https://tiptap.dev/docs/guides/output-json-html)
+- [Tiptap: generateHTML](https://tiptap.dev/docs/editor/api/utilities/html)
+- [Tiptap source code and demos on GitHub](https://github.com/ueberdosis/tiptap)
+- [Tiptap: what's free and what's paid](https://tiptap.dev/pricing)
+- [Svelte: the {@html} tag](https://svelte.dev/docs/svelte/@html)
+- [Svelte: interactive tutorial](https://svelte.dev/tutorial)
+- [Svelte: creating a project with sv create](https://svelte.dev/docs/cli/sv-create)
