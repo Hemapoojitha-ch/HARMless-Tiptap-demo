@@ -204,9 +204,9 @@
       <button
         onclick={() =>  {
             if (editorState.editor.isActive('textStyle', { color: 'purple' })) {
-                editorState.editor.chain().focus().unsetColor().run();
+                editorState.editor.chain().focus().unsetColor().run()
             } else {
-            editorState.editor.chain().focus().setColor('purple').run();
+            editorState.editor.chain().focus().setColor('purple').run()
             }
         }}
         class={editorState.editor.isActive('textStyle', { color: 'purple' }) ? 'is-active' : ''}
