@@ -8,7 +8,7 @@
   /** @type {Editor} */
   let editor
   
-  // Todo 1
+  // Reactive variable
   let jsonText = $state('')
 
   onMount(() => {
@@ -21,21 +21,32 @@
     return () => editor.destroy()
   })
 
-  // TODO 2: getJSON()
+  // TODO 1: getJSON()
+  function getJSON(){}
 
-  // TODO 4: loadJSON()
+  // TODO 2: loadJSON()
+  function loadJSON(){}
+
 </script>
 
 
 <main>
   <div class="editor" bind:this={element}></div>
 
-  <!-- TODO 3: Get JSON button + textarea -->
+  <!-- Get JSON button -->
+  <button onclick={getJSON}>Get JSON</button>
 
+  <!-- Load JSON button -->
+  <button onclick={loadJSON}>Load JSON</button>
+
+  <!-- textarea connected to jsonText -->
   <textarea bind:value={jsonText} rows="16" spellcheck="false"></textarea>
 
-  <!-- TODO 5: Load JSON button -->
+  
 </main>
+
+
+
 
 <style>
   main {
@@ -45,6 +56,10 @@
   .editor {
     border: 2px solid var(--gray-3);
     border-radius: 0.75rem;
+  }
+
+  button {
+    margin: 1rem 0.5rem 1rem 0;
   }
 
   textarea {
