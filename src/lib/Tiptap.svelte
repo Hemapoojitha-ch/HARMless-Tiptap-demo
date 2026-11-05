@@ -1,3 +1,5 @@
+// npm install @tiptap/core @tiptap/pm @tiptap/starter-kit @tiptap/extension-bubble-menu
+
 <script>
   import "./styles.css";
   import "./style.css";
@@ -81,6 +83,12 @@
   });
 </script>
 
+<!-- <div text-example style="margin: 20px;">
+    <form>
+        <input type="textArea">
+    </form>
+</div> -->
+
 <div hidden={!isEditing}>
 {#if editorState.editor}
   <div class="control-group">
@@ -113,8 +121,8 @@
       >
         Code
       </button>
-      <button onclick={() => editorState.editor?.chain().focus().unsetAllMarks().run()}>Clear marks</button>
-      <button onclick={() => editorState.editor?.chain().focus().clearNodes().run()}>Clear nodes</button>
+      <!-- <button onclick={() => editorState.editor?.chain().focus().unsetAllMarks().run()}>Clear marks</button>
+      <button onclick={() => editorState.editor?.chain().focus().clearNodes().run()}>Clear nodes</button> -->
       <button
         onclick={() => editorState.editor?.chain().focus().setParagraph().run()}
         class={editorState.editor.isActive("paragraph") ? "is-active" : ""}
@@ -139,13 +147,13 @@
       >
         H3
       </button>
-      <button
+      <!-- <button
         onclick={() => editorState.editor?.chain().focus().toggleHeading({ level: 4 }).run()}
         class={editorState.editor.isActive("heading", { level: 4 }) ? "is-active" : ""}
       >
         H4
-      </button>
-      <button
+      </button> -->
+      <!-- <button
         onclick={() => editorState.editor?.chain().focus().toggleHeading({ level: 5 }).run()}
         class={editorState.editor.isActive("heading", { level: 5 }) ? "is-active" : ""}
       >
@@ -156,7 +164,7 @@
         class={editorState.editor.isActive("heading", { level: 6 }) ? "is-active" : ""}
       >
         H6
-      </button>
+      </button> -->
       <button
         onclick={() => editorState.editor?.chain().focus().toggleBulletList().run()}
         class={editorState.editor.isActive("bulletList") ? "is-active" : ""}
@@ -169,12 +177,12 @@
       >
         Ordered list
       </button>
-      <button
+      <!-- <button
         onclick={() => editorState.editor?.chain().focus().toggleTaskList().run()}
         class={editorState.editor.isActive("taskList") ? "is-active" : ""}
       >
         Task list
-      </button>
+      </button> -->
       <button
         onclick={() => editorState.editor?.chain().focus().toggleCodeBlock().run()}
         class={editorState.editor.isActive("codeBlock") ? "is-active" : ""}
@@ -203,18 +211,10 @@
       >
         Redo
       </button>
-      <button
-        onclick={() =>  {
-            if (editorState.editor?.isActive('textStyle', { color: 'purple' })) {
-                editorState.editor?.chain().focus().unsetColor().run()
-            } else {
-            editorState.editor?.chain().focus().setColor('purple').run()
-            }
-        }}
-        class={editorState.editor.isActive('textStyle', { color: 'purple' }) ? 'is-active' : ''}
-      >
-        Purple
-      </button>
+      
+      <!-- TODO: Add new button -->
+
+
 
     </div>
   </div>
