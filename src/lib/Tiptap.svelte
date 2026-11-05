@@ -1,3 +1,5 @@
+// npm install @tiptap/core @tiptap/pm @tiptap/starter-kit @tiptap/extension-bubble-menu
+
 <script>
   import "./styles.css";
   import "./style.css";
