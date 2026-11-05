@@ -202,11 +202,18 @@
         Redo
       </button>
       <button
-        onclick={() => editorState.editor.chain().focus().setColor('#958DF1').run()}
-        class={editorState.editor.isActive('textStyle', { color: '#958DF1' }) ? 'is-active' : ''}
+        onclick={() =>  {
+            if (editorState.editor.isActive('textStyle', { color: 'purple' })) {
+                editorState.editor.chain().focus().unsetColor().run();
+            } else {
+            editorState.editor.chain().focus().setColor('purple').run();
+            }
+        }}
+        class={editorState.editor.isActive('textStyle', { color: 'purple' }) ? 'is-active' : ''}
       >
         Purple
       </button>
+
     </div>
   </div>
 {/if}
