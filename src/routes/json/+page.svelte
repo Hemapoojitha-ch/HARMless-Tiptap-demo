@@ -7,8 +7,9 @@
   let element = $state()
   /** @type {Editor} */
   let editor
+  
+  // Todo 1
   let jsonText = $state('')
-  let error = $state('')
 
   onMount(() => {
     editor = new Editor({
@@ -20,36 +21,20 @@
     return () => editor.destroy()
   })
 
-  function getJSON() {
-    const json = editor.getJSON()
-    jsonText = JSON.stringify(json, null, 2)
-    error = ''
-  }
+  // TODO 2: getJSON()
 
-  function loadJSON() {
-    try {
-      const json = JSON.parse(jsonText)
-      // throw on anything the schema doesn't allow, instead of quietly emptying the editor
-      editor.commands.setContent(json, { errorOnInvalidContent: true })
-      error = ''
-    } catch (err) {
-      // Tiptap puts the real reason (e.g. "Unknown node type: script") in err.cause
-      error = String(err instanceof Error && err.cause ? err.cause : err)
-    }
-  }
+  // TODO 4: loadJSON()
 </script>
+
 
 <main>
   <div class="editor" bind:this={element}></div>
 
-  <button onclick={getJSON}>Get JSON</button>
-  <button onclick={loadJSON}>Load JSON</button>
-
-  {#if error}
-    <p class="error">{error}</p>
-  {/if}
+  <!-- TODO 3: Get JSON button + textarea -->
 
   <textarea bind:value={jsonText} rows="16" spellcheck="false"></textarea>
+
+  <!-- TODO 5: Load JSON button -->
 </main>
 
 <style>
@@ -62,24 +47,9 @@
     border-radius: 0.75rem;
   }
 
-  .editor:focus-within {
-    border-color: var(--purple);
-  }
-
-  button {
-    margin: 1rem 0.5rem 1rem 0;
-  }
-
   textarea {
     display: block;
     width: 100%;
     font-family: monospace;
-    border: 2px solid var(--gray-3);
-    border-radius: 0.75rem;
-    padding: 1rem;
-  }
-
-  .error {
-    color: crimson;
   }
 </style>
