@@ -79,6 +79,12 @@
   });
 </script>
 
+<!-- <div text-example style="margin: 20px;">
+    <form>
+        <input type="textArea">
+    </form>
+</div> -->
+
 <div hidden={!isEditing}>
 {#if editorState.editor}
   <div class="control-group">
@@ -201,18 +207,9 @@
       >
         Redo
       </button>
-      <button
-        onclick={() =>  {
-            if (editorState.editor.isActive('textStyle', { color: 'purple' })) {
-                editorState.editor.chain().focus().unsetColor().run()
-            } else {
-            editorState.editor.chain().focus().setColor('purple').run()
-            }
-        }}
-        class={editorState.editor.isActive('textStyle', { color: 'purple' }) ? 'is-active' : ''}
-      >
-        Purple
-      </button>
+      <!-- TODO: Add new button -->
+
+
 
     </div>
   </div>
