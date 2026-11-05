@@ -11,11 +11,13 @@
 
   // oxlint-disable-next-line
   let element = $state();
+  /** @type {{ editor: Editor | null }} */
   let editorState = $state({ editor: null });
   let savedHTML = $state();
   let isEditing = $state(true);
 
   function save() {
+    if (!editorState.editor) return;
     const json = editorState.editor.getJSON();
     savedHTML = generateHTML(json, extensions);
     isEditing = false;
@@ -27,7 +29,7 @@
 
   const extensions = [
     Color.configure({ types: [TextStyle.name, ListItem.name] }),
-    TextStyle.configure({ types: [ListItem.name] }),
+    TextStyle,
     StarterKit,
     TaskItem.configure({ nested: true }),
     TaskList,
@@ -90,119 +92,119 @@
   <div class="control-group">
     <div class="button-group">
       <button
-        onclick={() => editorState.editor.chain().focus().toggleBold().run()}
+        onclick={() => editorState.editor?.chain().focus().toggleBold().run()}
         disabled={!editorState.editor.can().chain().focus().toggleBold().run()}
         class={editorState.editor.isActive("bold") ? "is-active" : ""}
       >
         Bold
       </button>
       <button
-        onclick={() => editorState.editor.chain().focus().toggleItalic().run()}
+        onclick={() => editorState.editor?.chain().focus().toggleItalic().run()}
         disabled={!editorState.editor.can().chain().focus().toggleItalic().run()}
         class={editorState.editor.isActive("italic") ? "is-active" : ""}
       >
         Italic
       </button>
       <button
-        onclick={() => editorState.editor.chain().focus().toggleStrike().run()}
+        onclick={() => editorState.editor?.chain().focus().toggleStrike().run()}
         disabled={!editorState.editor.can().chain().focus().toggleStrike().run()}
         class={editorState.editor.isActive("strike") ? "is-active" : ""}
       >
         Strike
       </button>
       <button
-        onclick={() => editorState.editor.chain().focus().toggleCode().run()}
+        onclick={() => editorState.editor?.chain().focus().toggleCode().run()}
         disabled={!editorState.editor.can().chain().focus().toggleCode().run()}
         class={editorState.editor.isActive("code") ? "is-active" : ""}
       >
         Code
       </button>
-      <button onclick={() => editorState.editor.chain().focus().unsetAllMarks().run()}>Clear marks</button>
-      <button onclick={() => editorState.editor.chain().focus().clearNodes().run()}>Clear nodes</button>
+      <button onclick={() => editorState.editor?.chain().focus().unsetAllMarks().run()}>Clear marks</button>
+      <button onclick={() => editorState.editor?.chain().focus().clearNodes().run()}>Clear nodes</button>
       <button
-        onclick={() => editorState.editor.chain().focus().setParagraph().run()}
+        onclick={() => editorState.editor?.chain().focus().setParagraph().run()}
         class={editorState.editor.isActive("paragraph") ? "is-active" : ""}
       >
         Paragraph
       </button>
       <button
-        onclick={() => editorState.editor.chain().focus().toggleHeading({ level: 1 }).run()}
+        onclick={() => editorState.editor?.chain().focus().toggleHeading({ level: 1 }).run()}
         class={editorState.editor.isActive("heading", { level: 1 }) ? "is-active" : ""}
       >
         H1
       </button>
       <button
-        onclick={() => editorState.editor.chain().focus().toggleHeading({ level: 2 }).run()}
+        onclick={() => editorState.editor?.chain().focus().toggleHeading({ level: 2 }).run()}
         class={editorState.editor.isActive("heading", { level: 2 }) ? "is-active" : ""}
       >
         H2
       </button>
       <button
-        onclick={() => editorState.editor.chain().focus().toggleHeading({ level: 3 }).run()}
+        onclick={() => editorState.editor?.chain().focus().toggleHeading({ level: 3 }).run()}
         class={editorState.editor.isActive("heading", { level: 3 }) ? "is-active" : ""}
       >
         H3
       </button>
       <button
-        onclick={() => editorState.editor.chain().focus().toggleHeading({ level: 4 }).run()}
+        onclick={() => editorState.editor?.chain().focus().toggleHeading({ level: 4 }).run()}
         class={editorState.editor.isActive("heading", { level: 4 }) ? "is-active" : ""}
       >
         H4
       </button>
       <button
-        onclick={() => editorState.editor.chain().focus().toggleHeading({ level: 5 }).run()}
+        onclick={() => editorState.editor?.chain().focus().toggleHeading({ level: 5 }).run()}
         class={editorState.editor.isActive("heading", { level: 5 }) ? "is-active" : ""}
       >
         H5
       </button>
       <button
-        onclick={() => editorState.editor.chain().focus().toggleHeading({ level: 6 }).run()}
+        onclick={() => editorState.editor?.chain().focus().toggleHeading({ level: 6 }).run()}
         class={editorState.editor.isActive("heading", { level: 6 }) ? "is-active" : ""}
       >
         H6
       </button>
       <button
-        onclick={() => editorState.editor.chain().focus().toggleBulletList().run()}
+        onclick={() => editorState.editor?.chain().focus().toggleBulletList().run()}
         class={editorState.editor.isActive("bulletList") ? "is-active" : ""}
       >
         Bullet list
       </button>
       <button
-        onclick={() => editorState.editor.chain().focus().toggleOrderedList().run()}
+        onclick={() => editorState.editor?.chain().focus().toggleOrderedList().run()}
         class={editorState.editor.isActive("orderedList") ? "is-active" : ""}
       >
         Ordered list
       </button>
       <button
-        onclick={() => editorState.editor.chain().focus().toggleTaskList().run()}
+        onclick={() => editorState.editor?.chain().focus().toggleTaskList().run()}
         class={editorState.editor.isActive("taskList") ? "is-active" : ""}
       >
         Task list
       </button>
       <button
-        onclick={() => editorState.editor.chain().focus().toggleCodeBlock().run()}
+        onclick={() => editorState.editor?.chain().focus().toggleCodeBlock().run()}
         class={editorState.editor.isActive("codeBlock") ? "is-active" : ""}
       >
         Code block
       </button>
       <button
-        onclick={() => editorState.editor.chain().focus().toggleBlockquote().run()}
+        onclick={() => editorState.editor?.chain().focus().toggleBlockquote().run()}
         class={editorState.editor.isActive("blockquote") ? "is-active" : ""}
       >
         Blockquote
       </button>
-      <button onclick={() => editorState.editor.chain().focus().setHorizontalRule().run()}>
+      <button onclick={() => editorState.editor?.chain().focus().setHorizontalRule().run()}>
         Horizontal rule
       </button>
-      <button onclick={() => editorState.editor.chain().focus().setHardBreak().run()}>Hard break</button>
+      <button onclick={() => editorState.editor?.chain().focus().setHardBreak().run()}>Hard break</button>
       <button
-        onclick={() => editorState.editor.chain().focus().undo().run()}
+        onclick={() => editorState.editor?.chain().focus().undo().run()}
         disabled={!editorState.editor.can().chain().focus().undo().run()}
       >
         Undo
       </button>
       <button
-        onclick={() => editorState.editor.chain().focus().redo().run()}
+        onclick={() => editorState.editor?.chain().focus().redo().run()}
         disabled={!editorState.editor.can().chain().focus().redo().run()}
       >
         Redo
