@@ -1,4 +1,4 @@
-// npm install @tiptap/core @tiptap/pm @tiptap/starter-kit @tiptap/extension-bubble-menu
+<!-- // npm install @tiptap/core @tiptap/pm @tiptap/starter-kit @tiptap/extension-bubble-menu -->
 
 <script>
   import "./styles.css";
@@ -66,9 +66,9 @@
               I know, I know, this is impressive. It’s only the tip of the iceberg though. Give it a try and click a little bit around. Don’t forget to check the other examples too.
             </p>
             <blockquote>
-              Wow, that’s amazing. Good work, boy! 👏
+              Hello! This is a blockquote
               <br />
-              — Mom
+              — HARMless
             </blockquote>
           `,
       onTransaction: ({ editor }) => {
@@ -83,11 +83,11 @@
   });
 </script>
 
-<!-- <div text-example style="margin: 20px;">
+<div text-example style="margin: 20px;">
     <form>
         <input type="textArea">
     </form>
-</div> -->
+</div>
 
 <div hidden={!isEditing}>
 {#if editorState.editor}
@@ -211,8 +211,14 @@
       >
         Redo
       </button>
-      
+
       <!-- TODO: Add new button -->
+       <button
+       onclick={()=> {if (editorState.editor?.isActive('textStyle', {color : 'purple'})) {
+        editorState.editor?.chain().focus().unsetColor().run()
+       } else {editorState.editor?.chain().focus().setColor('purple').run()}}}
+       class={editorState.editor?.isActive('textStyle', {color : 'purple'}) ? 'is-active' : ''}
+       >Purple</button>
 
 
 

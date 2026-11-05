@@ -2,12 +2,13 @@
   import '#lib/style.css'
   import { onMount } from 'svelte'
   // TODO 1: import generateHTML
-  import { Editor } from '@tiptap/core'
+  import { Editor, generateHTML } from '@tiptap/core'
   import StarterKit from '@tiptap/starter-kit'
 
   let element = $state()
   let editor
   // TODO 2: a variable to hold the saved HTML
+  let savedHTML = $state("")
 
   onMount(() => {
     editor = new Editor({
@@ -20,6 +21,10 @@
   })
 
   // TODO 3: the save function (editor > JSON > HTML)
+  function save() {
+    const json = editor.getJSON()
+    savedHTML = generateHTML(json, [StarterKit])
+  }
 
 </script>
 
@@ -27,8 +32,12 @@
   <div class="editor" bind:this={element}></div>
 
   <!-- TODO 4: a Save button -->
+   <button onclick={save}>SAVE</button>
 
   <!-- TODO 5: show the saved post (only after Save has been clicked) -->
+   {#if savedHTML}
+   <article>{@html savedHTML}</article>
+   {/if}
 </main>
 
 <style>

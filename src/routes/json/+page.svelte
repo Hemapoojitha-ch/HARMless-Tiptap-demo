@@ -21,11 +21,17 @@
     return () => editor.destroy()
   })
 
-  // TODO 1: getJSON()
-  function getJSON(){}
+ 
+  function getJSON(){
+    const json = editor.getJSON()
+    jsonText = JSON.stringify(json,null,2)
 
-  // TODO 2: loadJSON()
-  function loadJSON(){}
+  }
+
+  function loadJSON(){
+    const json = JSON.parse(jsonText)
+    editor.commands.setContent(json)
+  }
 
 </script>
 
